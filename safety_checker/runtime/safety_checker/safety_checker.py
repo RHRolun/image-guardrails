@@ -3,6 +3,7 @@ import numpy as np
 import logging
 import base64
 from io import BytesIO
+from typing import Dict
 
 from diffusers import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion import StableDiffusionSafetyChecker
@@ -27,7 +28,12 @@ class SafetyChecker(kserve.Model):
         self.safety_checker = StableDiffusionSafetyChecker.from_pretrained(
             "CompVis/stable-diffusion-safety-checker").to(self.device)
 
-    def predict(self, inputs: dict) -> dict:
+    def predict(self,
+        payload: Dict,
+        headers: Dict[str, str] = None,
+        response_headers: Dict[str, str] = None,
+    ) -> Dict:
+
         try:
             image_data = inputs.get("image")
             if not image_data:
