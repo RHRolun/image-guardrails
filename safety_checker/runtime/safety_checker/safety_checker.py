@@ -29,6 +29,19 @@ class SafetyChecker(kserve.Model):
         self.safety_checker = StableDiffusionSafetyChecker.from_pretrained(
             "CompVis/stable-diffusion-safety-checker").to(self.device)
 
+        image_to_ban = PIL_Image.open("green-fedora.png").convert("RGB")
+        self.add_nsfw_embedding(image_to_ban, 0.6)
+
+    def add_nsfw_embedding(self, image: PIL_Image, weight: int):
+        safety_checker_input = self.feature_extractor(image_to_ban, return_tensors="pt").to(self.device)
+
+        pooled_output  = self.safety_checker.vision_model(safety_checker_input.pixel_values.to(self.dtype))[1]
+        image_embeds = self.safety_checker.visual_projection(pooled_output)
+        
+        self.safety_checker.concept_embeds = nn.Parameter(torch.cat([self.safety_checker.concept_embeds, image_embeds]))
+        self.safety_checker.concept_embeds_weights = nn.Parameter(torch.cat([self.safety_checker.concept_embeds_weights, torch.Tensor([0.6]).to(self.device)]))
+
+
     def predict(self,
         payload: InferRequest,
         headers: Dict[str, str] = None,
