@@ -1,5 +1,5 @@
-FROM quay.io/modh/odh-pytorch-notebook@sha256:aaf5efdeb965abd7bb0fb330a3f63b58d86dd8bfd770335a371d296cb6ba50e2
-#FROM python:3.9-slim
+#FROM quay.io/modh/odh-pytorch-notebook@sha256:aaf5efdeb965abd7bb0fb330a3f63b58d86dd8bfd770335a371d296cb6ba50e2
+FROM quay.io/opendatahub/workbench-images:cuda-ubi9-python-3.11-20250218
 
 # RUN apt-get update \
 # && apt-get install -y --no-install-recommends git
