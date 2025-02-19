@@ -8,7 +8,8 @@ import numpy as np
 from diffusers import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion import StableDiffusionSafetyChecker
 from transformers import CLIPImageProcessor, CLIPTokenizer, CLIPModel
-import torch
+import torch 
+import torch.nn as nn
 from torchvision.transforms.functional import pil_to_tensor, to_pil_image
 from PIL import Image as PIL_Image
 
@@ -33,7 +34,7 @@ class SafetyChecker(kserve.Model):
         self.add_nsfw_embedding(image_to_ban, 0.6)
 
     def add_nsfw_embedding(self, image: PIL_Image, weight: int):
-        safety_checker_input = self.feature_extractor(image_to_ban, return_tensors="pt").to(self.device)
+        safety_checker_input = self.feature_extractor(image, return_tensors="pt").to(self.device)
 
         pooled_output  = self.safety_checker.vision_model(safety_checker_input.pixel_values.to(self.dtype))[1]
         image_embeds = self.safety_checker.visual_projection(pooled_output)
