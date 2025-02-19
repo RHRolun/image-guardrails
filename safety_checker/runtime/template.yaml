@@ -14,7 +14,9 @@ spec:
   spec:
     predictor:
       containers:
-        - image: 'quay.io/rlundber/safety_checker:0.4'
+        - args:
+          - '--model_name=safety-checker'
+          image: 'quay.io/rlundber/safety_checker:0.14'
           name: kserve-container
           resources:
             limits:

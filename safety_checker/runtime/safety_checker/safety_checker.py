@@ -22,8 +22,7 @@ class SafetyChecker(kserve.Model):
         self.name = name
         self.ready = True
 
-        #self.device="cuda"
-        self.device="cpu"
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.dtype=torch.float16
 
         self.feature_extractor = CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch32")
